@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Heart, Menu, X, User, Search, Calendar, AlertCircle, Home } from 'lucide-react';
 
 const Navigation = () => {
+  console.log('Navigation component is rendering');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 

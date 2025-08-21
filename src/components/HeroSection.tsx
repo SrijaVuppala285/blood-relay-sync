@@ -5,6 +5,7 @@ import { Heart, Users, MapPin, Clock } from 'lucide-react';
 import heroImage from '@/assets/hero-blood-donation.jpg';
 
 const HeroSection = () => {
+  console.log('HeroSection component is rendering');
   const stats = [
     { icon: Users, label: 'Active Donors', value: '25,000+' },
     { icon: Heart, label: 'Lives Saved', value: '50,000+' },
