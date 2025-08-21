@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Phone, Heart, Filter, User, Clock, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Matching = () => {
+  const navigate = useNavigate();
   const [searchFilters, setSearchFilters] = useState({
     bloodGroup: '',
     pincode: '',
@@ -10,7 +12,8 @@ const Matching = () => {
     distance: '10',
   });
 
-  const [searchResults, setSearchResults] = useState([
+  // All available donors
+  const allDonors = [
     {
       id: '1',
       name: 'Rajesh Kumar',
@@ -53,19 +56,80 @@ const Matching = () => {
       donationCount: 25,
       verified: true,
     },
-  ]);
+    {
+      id: '4',
+      name: 'Anita Sharma',
+      bloodGroup: 'A+',
+      location: 'Rohini, Delhi',
+      pincode: '110085',
+      phone: '+91 98765 43213',
+      distance: '12.1 km',
+      lastDonation: '6 months ago',
+      availability: 'Available',
+      rating: 4.7,
+      donationCount: 15,
+      verified: true,
+    },
+    {
+      id: '5',
+      name: 'Vikram Singh',
+      bloodGroup: 'B-',
+      location: 'Gurgaon, Haryana',
+      pincode: '122002',
+      phone: '+91 98765 43214',
+      distance: '15.3 km',
+      lastDonation: '4 months ago',
+      availability: 'Available this weekend',
+      rating: 4.6,
+      donationCount: 9,
+      verified: true,
+    },
+  ];
+
+  const [searchResults, setSearchResults] = useState(allDonors.slice(0, 3));
+  const [hasSearched, setHasSearched] = useState(false);
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Searching with filters:', searchFilters);
-    // Mock search functionality - would integrate with backend
+    setHasSearched(true);
+    
+    let filtered = allDonors.filter(donor => {
+      // Blood group filter
+      if (searchFilters.bloodGroup && donor.bloodGroup !== searchFilters.bloodGroup) {
+        return false;
+      }
+      
+      // Pincode filter (basic matching - in real app would use proper distance calculation)
+      if (searchFilters.pincode && !donor.pincode.includes(searchFilters.pincode.substring(0, 3))) {
+        return false;
+      }
+      
+      // Urgency filter (availability)
+      if (searchFilters.urgency === 'immediate' && !donor.availability.includes('Available')) {
+        return false;
+      }
+      
+      return true;
+    });
+    
+    setSearchResults(filtered);
   };
 
   const handleContact = (donorId: string) => {
-    console.log('Contacting donor:', donorId);
-    // Mock contact functionality
+    const donor = allDonors.find(d => d.id === donorId);
+    if (donor) {
+      // Show contact modal or direct call
+      const confirmCall = window.confirm(`Contact ${donor.name} at ${donor.phone}?`);
+      if (confirmCall) {
+        window.open(`tel:${donor.phone}`);
+      }
+    }
+  };
+
+  const handleViewProfile = (donorId: string) => {
+    navigate(`/donor/${donorId}`);
   };
 
   return (
@@ -183,7 +247,7 @@ const Matching = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-foreground">
-              Search Results ({searchResults.length} donors found)
+              {hasSearched ? `Search Results (${searchResults.length} donors found)` : `Available Donors (${searchResults.length} nearby)`}
             </h2>
             <div className="flex items-center space-x-2">
               <Filter className="w-4 h-4 text-muted-foreground" />
@@ -266,7 +330,10 @@ const Matching = () => {
                       Contact
                     </motion.button>
                     
-                    <button className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <button 
+                      onClick={() => handleViewProfile(donor.id)}
+                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    >
                       View Profile
                     </button>
                   </div>

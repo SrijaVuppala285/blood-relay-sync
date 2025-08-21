@@ -24,7 +24,7 @@ const Emergency = () => {
   });
 
   // Mock emergency requests data
-  const emergencyRequests = [
+  const [emergencyRequests, setEmergencyRequests] = useState([
     {
       id: '1',
       bloodGroup: 'O-',
@@ -67,7 +67,7 @@ const Emergency = () => {
       expiresAt: '2024-03-22T16:00:00Z',
       description: 'Scheduled surgery tomorrow morning. One unit required.',
     },
-  ];
+  ]);
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -78,8 +78,25 @@ const Emergency = () => {
 
   const handleSubmitRequest = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitting emergency request:', formData);
-    // Mock submission - would integrate with backend
+    
+    const newRequest = {
+      id: Date.now().toString(),
+      bloodGroup: formData.bloodGroup,
+      location: `${formData.hospital}, ${formData.location}`,
+      pincode: formData.pincode,
+      urgencyLevel: formData.urgencyLevel as 'critical' | 'high' | 'medium',
+      contactName: formData.contactName,
+      contactPhone: formData.contactPhone,
+      hospital: formData.hospital,
+      unitsNeeded: parseInt(formData.unitsNeeded),
+      postedAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + (24 * 60 * 60 * 1000)).toISOString(), // 24 hours from now
+      description: formData.description || `Urgent need for ${formData.unitsNeeded} unit(s) of ${formData.bloodGroup} blood at ${formData.hospital}.`,
+    };
+    
+    setEmergencyRequests([newRequest, ...emergencyRequests]);
+    console.log('Emergency request created:', newRequest);
+    
     setShowCreateForm(false);
     setFormData({
       bloodGroup: '',

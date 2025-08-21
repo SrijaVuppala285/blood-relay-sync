@@ -10,6 +10,7 @@ import Signup from "@/pages/Signup";
 import Matching from "@/pages/Matching";
 import Campaigns from "@/pages/Campaigns";
 import Emergency from "@/pages/Emergency";
+import DonorProfile from "@/pages/DonorProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/matching" element={<Matching />} />
             <Route path="/campaigns" element={<Campaigns />} />
             <Route path="/emergency" element={<Emergency />} />
+            <Route path="/donor/:id" element={<DonorProfile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

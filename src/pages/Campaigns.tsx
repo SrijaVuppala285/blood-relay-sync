@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import CampaignCard from '@/components/CampaignCard';
+import CreateCampaignModal from '@/components/CreateCampaignModal';
 import { Calendar, MapPin, Filter, Plus, Search } from 'lucide-react';
 
 const Campaigns = () => {
@@ -10,9 +11,10 @@ const Campaigns = () => {
     location: '',
     date: '',
   });
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Mock campaigns data
-  const campaigns = [
+  const [campaigns, setCampaigns] = useState([
     {
       id: '1',
       title: 'Community Blood Drive - Apollo Hospital',
@@ -79,11 +81,24 @@ const Campaigns = () => {
       image: 'https://images.unsplash.com/photo-1559757148-9f724dfd6233?w=500&h=300&fit=crop',
       status: 'upcoming' as const,
     },
-  ];
+  ]);
 
   const handleJoinCampaign = (campaignId: string) => {
     console.log('Joining campaign:', campaignId);
     // Mock join functionality - would integrate with backend
+  };
+
+  const handleCreateCampaign = (campaignData: any) => {
+    const newCampaign = {
+      ...campaignData,
+      date: new Date(campaignData.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+    };
+    setCampaigns([newCampaign, ...campaigns]);
+    console.log('Created new campaign:', newCampaign);
   };
 
   const filteredCampaigns = campaigns.filter(campaign => {
@@ -140,6 +155,7 @@ const Campaigns = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => setShowCreateModal(true)}
             className="btn-primary whitespace-nowrap"
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -267,7 +283,10 @@ const Campaigns = () => {
             <p className="text-muted-foreground mb-6">
               Try adjusting your search terms or filters to find more campaigns.
             </p>
-            <button className="btn-primary">
+            <button 
+              onClick={() => setShowCreateModal(true)}
+              className="btn-primary"
+            >
               <Plus className="w-4 h-4 mr-2" />
               Create Your First Campaign
             </button>
@@ -292,6 +311,7 @@ const Campaigns = () => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => setShowCreateModal(true)}
                 className="btn-hero"
               >
                 <Plus className="w-5 h-5 mr-2" />
@@ -307,6 +327,13 @@ const Campaigns = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Create Campaign Modal */}
+        <CreateCampaignModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateCampaign}
+        />
       </div>
     </div>
   );
