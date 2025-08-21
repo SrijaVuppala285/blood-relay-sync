@@ -113,7 +113,7 @@ const Emergency = () => {
           className="text-center mb-8"
         >
           <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <AlertCircle className="w-8 h-8 text-destructive animate-pulse" />
+            <AlertCircle className="w-8 h-8 text-destructive" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Emergency Blood Requests
@@ -175,58 +175,50 @@ const Emergency = () => {
           </motion.button>
         </motion.div>
 
-        {/* Emergency Stats */}
+        {/* Emergency Stats - Better aligned */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
         >
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-              <div>
-                <div className="text-2xl font-bold text-red-600">
-                  {emergencyRequests.filter(r => r.urgencyLevel === 'critical').length}
-                </div>
-                <div className="text-sm text-red-600">Critical Cases</div>
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+            <div className="flex flex-col items-center">
+              <AlertCircle className="w-6 h-6 text-red-600 mb-2" />
+              <div className="text-2xl font-bold text-red-600">
+                {emergencyRequests.filter(r => r.urgencyLevel === 'critical').length}
               </div>
+              <div className="text-sm text-red-600 font-medium">Critical Cases</div>
             </div>
           </div>
 
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 text-orange-600 mr-2" />
-              <div>
-                <div className="text-2xl font-bold text-orange-600">
-                  {emergencyRequests.filter(r => r.urgencyLevel === 'high').length}
-                </div>
-                <div className="text-sm text-orange-600">High Priority</div>
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-center">
+            <div className="flex flex-col items-center">
+              <Clock className="w-6 h-6 text-orange-600 mb-2" />
+              <div className="text-2xl font-bold text-orange-600">
+                {emergencyRequests.filter(r => r.urgencyLevel === 'high').length}
               </div>
+              <div className="text-sm text-orange-600 font-medium">High Priority</div>
             </div>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <MapPin className="w-5 h-5 text-blue-600 mr-2" />
-              <div>
-                <div className="text-2xl font-bold text-blue-600">
-                  {new Set(emergencyRequests.map(r => r.pincode)).size}
-                </div>
-                <div className="text-sm text-blue-600">Active Locations</div>
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+            <div className="flex flex-col items-center">
+              <MapPin className="w-6 h-6 text-blue-600 mb-2" />
+              <div className="text-2xl font-bold text-blue-600">
+                {new Set(emergencyRequests.map(r => r.pincode)).size}
               </div>
+              <div className="text-sm text-blue-600 font-medium">Active Locations</div>
             </div>
           </div>
 
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="flex items-center">
-              <Heart className="w-5 h-5 text-green-600 mr-2" />
-              <div>
-                <div className="text-2xl font-bold text-green-600">
-                  {emergencyRequests.reduce((sum, r) => sum + r.unitsNeeded, 0)}
-                </div>
-                <div className="text-sm text-green-600">Units Needed</div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+            <div className="flex flex-col items-center">
+              <Heart className="w-6 h-6 text-green-600 mb-2" />
+              <div className="text-2xl font-bold text-green-600">
+                {emergencyRequests.reduce((sum, r) => sum + r.unitsNeeded, 0)}
               </div>
+              <div className="text-sm text-green-600 font-medium">Units Needed</div>
             </div>
           </div>
         </motion.div>
@@ -244,7 +236,7 @@ const Emergency = () => {
             </h2>
             <div className="flex items-center text-sm text-muted-foreground">
               <Clock className="w-4 h-4 mr-1" />
-              Auto-refreshing every 30 seconds
+              Updated every 30 seconds
             </div>
           </div>
 

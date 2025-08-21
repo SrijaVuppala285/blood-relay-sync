@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { Heart, Menu, X, User, Search, Calendar, AlertCircle, Home } from 'lucide-react';
 
 const Navigation = () => {
-  console.log('Navigation component is rendering');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -27,7 +26,7 @@ const Navigation = () => {
           <Link to="/" className="flex items-center space-x-2">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center animate-blood-pulse"
+              className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center"
             >
               <Heart className="h-6 w-6 text-white" fill="currentColor" />
             </motion.div>

@@ -177,7 +177,7 @@
   }
 
   .btn-emergency {
-    @apply bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold px-6 py-3 rounded-lg transition-all duration-200 animate-pulse;
+    @apply bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold px-6 py-3 rounded-lg transition-all duration-200;
   }
 
   .input-blood {
@@ -189,7 +189,7 @@
   }
 
   .badge-urgent {
-    @apply inline-flex items-center justify-center px-3 py-1 bg-destructive/10 text-destructive font-bold text-sm rounded-full border border-destructive/20 animate-pulse;
+    @apply inline-flex items-center justify-center px-3 py-1 bg-destructive/10 text-destructive font-bold text-sm rounded-full border border-destructive/20;
   }
 
   .badge-success {
@@ -214,31 +214,5 @@
     @apply animate-in zoom-in-95 fade-in duration-300;
   }
 
-  .animate-blood-pulse {
-    animation: bloodPulse 2s ease-in-out infinite;
-  }
-
-  .animate-heartbeat {
-    animation: heartbeat 1.5s ease-in-out infinite;
-  }
-}
-
-@keyframes bloodPulse {
-  0%, 100% { 
-    opacity: 1; 
-    transform: scale(1);
-  }
-  50% { 
-    opacity: 0.8; 
-    transform: scale(1.05);
-  }
-}
-
-@keyframes heartbeat {
-  0%, 14%, 28%, 42% {
-    transform: scale(1);
-  }
-  7%, 21%, 35% {
-    transform: scale(1.1);
-  }
+  /* Removed excessive animations for better UX */
 }

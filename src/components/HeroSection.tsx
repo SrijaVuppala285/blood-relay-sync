@@ -5,7 +5,6 @@ import { Heart, Users, MapPin, Clock } from 'lucide-react';
 import heroImage from '@/assets/hero-blood-donation.jpg';
 
 const HeroSection = () => {
-  console.log('HeroSection component is rendering');
   const stats = [
     { icon: Users, label: 'Active Donors', value: '25,000+' },
     { icon: Heart, label: 'Lives Saved', value: '50,000+' },
@@ -33,7 +32,7 @@ const HeroSection = () => {
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
               Save Lives Through
-              <span className="block text-gradient-hero animate-heartbeat">
+              <span className="block text-gradient-hero">
                 Smart Blood Matching
               </span>
             </h1>
@@ -84,39 +83,18 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Floating Elements */}
-      <motion.div
-        animate={{
-          y: [-10, 10, -10],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="absolute top-1/4 left-1/12 hidden lg:block"
-      >
+      {/* Static decorative elements */}
+      <div className="absolute top-1/4 left-1/12 hidden lg:block">
         <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
           <Heart className="w-8 h-8 text-white" fill="currentColor" />
         </div>
-      </motion.div>
+      </div>
 
-      <motion.div
-        animate={{
-          y: [10, -10, 10],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="absolute bottom-1/4 right-1/12 hidden lg:block"
-      >
+      <div className="absolute bottom-1/4 right-1/12 hidden lg:block">
         <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm">
           <Users className="w-6 h-6 text-white" />
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

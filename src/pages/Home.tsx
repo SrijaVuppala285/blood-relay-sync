@@ -6,7 +6,6 @@ import CampaignCard from '@/components/CampaignCard';
 import { Heart, Users, Shield, Clock, ArrowRight, Search, Calendar, AlertCircle } from 'lucide-react';
 
 const Home = () => {
-  console.log('Home component is rendering');
   // Mock data for featured campaigns
   const featuredCampaigns = [
     {

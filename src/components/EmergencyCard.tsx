@@ -96,7 +96,7 @@ const EmergencyCard: React.FC<EmergencyCardProps> = ({ request, onContact }) => 
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, boxShadow: '0 20px 40px -12px rgba(220, 38, 38, 0.25)' }}
       className={`card-emergency relative overflow-hidden ${
-        request.urgencyLevel === 'critical' ? 'ring-2 ring-red-500 animate-pulse' : ''
+        request.urgencyLevel === 'critical' ? 'ring-2 ring-red-500' : ''
       }`}
     >
       {/* Urgency Indicator */}
@@ -108,7 +108,7 @@ const EmergencyCard: React.FC<EmergencyCardProps> = ({ request, onContact }) => 
           <div className="badge-blood-type text-lg font-bold">
             {request.bloodGroup}
           </div>
-          <div className={`badge-urgent ${request.urgencyLevel === 'critical' ? 'animate-pulse' : ''}`}>
+          <div className="badge-urgent">
             {getUrgencyLabel()}
           </div>
         </div>
@@ -175,11 +175,7 @@ const EmergencyCard: React.FC<EmergencyCardProps> = ({ request, onContact }) => 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onContact(request.id)}
-            className={`font-semibold py-2 px-4 rounded-lg transition-all duration-200 ${
-              request.urgencyLevel === 'critical'
-                ? 'btn-emergency'
-                : 'btn-primary'
-            }`}
+            className="btn-primary font-semibold py-2 px-4 rounded-lg transition-all duration-200"
           >
             <Phone className="w-4 h-4 mr-2" />
             Contact Now
