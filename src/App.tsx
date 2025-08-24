@@ -16,6 +16,12 @@ import Campaigns from "@/pages/Campaigns";
 import Emergency from "@/pages/Emergency";
 import Achievements from "@/pages/Achievements";
 import DonorProfile from "@/pages/DonorProfile";
+import HowItWorks from "@/pages/HowItWorks";
+import FAQ from "@/pages/FAQ";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import Help from "@/pages/Help";
+import Cookies from "@/pages/Cookies";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +48,12 @@ const App = () => {
                 <Route path="/emergency" element={<Emergency />} />
                 <Route path="/achievements" element={<Achievements />} />
                 <Route path="/donor/:id" element={<DonorProfile />} />
+                <Route path="/how-it-works" element={<HowItWorks />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/help" element={<Help />} />
+                <Route path="/cookies" element={<Cookies />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
