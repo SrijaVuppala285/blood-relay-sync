@@ -1,18 +1,53 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Menu, X, User, Search, Calendar, AlertCircle, Home } from 'lucide-react';
+import { Heart, Menu, X, User, Search, Calendar, AlertCircle, Home, Award, LogOut, Info, Phone } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import Notifications from './Notifications';
 
 const Navigation = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
 
-  const navLinks = [
+  // Pre-login navigation
+  const publicNavLinks = [
     { name: 'Home', href: '/', icon: Home },
-    { name: 'Find Match', href: '/matching', icon: Search },
     { name: 'Campaigns', href: '/campaigns', icon: Calendar },
-    { name: 'Emergency', href: '/emergency', icon: AlertCircle },
+    { name: 'About Us', href: '/about', icon: Info },
+    { name: 'Contact Us', href: '/contact', icon: Phone },
   ];
+
+  // Post-login navigation based on role
+  const getAuthenticatedNavLinks = () => {
+    const baseLinks = [
+      { name: 'Home', href: '/', icon: Home },
+      { name: 'Campaigns', href: '/campaigns', icon: Calendar },
+    ];
+
+    if (user?.role === 'donor') {
+      return [
+        ...baseLinks,
+        { name: 'Find Recipients', href: '/matching', icon: Search },
+        { name: 'Emergency', href: '/emergency', icon: AlertCircle },
+        { name: 'Achievements', href: '/achievements', icon: Award },
+      ];
+    } else if (user?.role === 'recipient') {
+      return [
+        ...baseLinks,
+        { name: 'Find Donors', href: '/matching', icon: Search },
+        { name: 'Emergency', href: '/emergency', icon: AlertCircle },
+      ];
+    } else {
+      return [
+        ...baseLinks,
+        { name: 'Find Donors', href: '/matching', icon: Search },
+        { name: 'Emergency', href: '/emergency', icon: AlertCircle },
+      ];
+    }
+  };
+
+  const navLinks = isAuthenticated ? getAuthenticatedNavLinks() : publicNavLinks;
 
   const isActiveLink = (href: string) => {
     return location.pathname === href;
@@ -53,20 +88,44 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Section */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/login"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="btn-primary"
-            >
-              Join as Donor
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Notifications />
+                <div className="flex items-center space-x-3">
+                  <Link
+                    to="/profile"
+                    className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <User className="h-5 w-5" />
+                    <span className="text-sm font-medium">{user?.name}</span>
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="flex items-center space-x-1 text-muted-foreground hover:text-destructive transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span className="text-sm">Logout</span>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="btn-primary"
+                >
+                  Join as Donor
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -107,20 +166,45 @@ const Navigation = () => {
                 </Link>
               ))}
               <div className="pt-4 border-t border-border/50 flex flex-col space-y-2">
-                <Link
-                  to="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-muted-foreground hover:text-primary transition-colors px-3 py-2"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="btn-primary text-center"
-                >
-                  Join as Donor
-                </Link>
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors px-3 py-2"
+                    >
+                      <User className="h-4 w-4" />
+                      <span>{user?.name}</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex items-center space-x-2 text-muted-foreground hover:text-destructive transition-colors px-3 py-2 text-left"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Logout</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-muted-foreground hover:text-primary transition-colors px-3 py-2"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="btn-primary text-center"
+                    >
+                      Join as Donor
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

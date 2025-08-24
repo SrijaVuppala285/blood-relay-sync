@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Heart, Mail, Lock, User, MapPin, Phone, ArrowLeft, CheckCircle } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const { signup } = useAuth();
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -41,16 +46,30 @@ const Signup = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Mock registration process
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
       if (step === 3) {
         // Complete registration
-        console.log('Registration complete:', formData);
+        await signup(formData);
+        toast({
+          title: "Registration Complete!",
+          description: "Welcome to BloodBridge. You can now start saving lives.",
+        });
+        navigate('/');
       } else {
-        handleNext();
+        // Move to next step
+        setTimeout(() => {
+          setIsLoading(false);
+          handleNext();
+        }, 1000);
       }
-    }, 2000);
+    } catch (error) {
+      toast({
+        title: "Registration Failed",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
   };
 
   const renderStep1 = () => (
