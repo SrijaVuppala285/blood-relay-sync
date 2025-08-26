@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import EmergencyCard from '@/components/EmergencyCard';
 import { AlertCircle, Plus, Filter, Clock, MapPin, Phone, Heart } from 'lucide-react';
@@ -23,8 +23,8 @@ const Emergency = () => {
     description: '',
   });
 
-  // Mock emergency requests data
-  const [emergencyRequests, setEmergencyRequests] = useState([
+  // Default mock emergency requests data
+  const defaultRequests = [
     {
       id: '1',
       bloodGroup: 'O-',
@@ -36,7 +36,7 @@ const Emergency = () => {
       hospital: 'AIIMS Hospital',
       unitsNeeded: 3,
       postedAt: '2024-03-20T10:30:00Z',
-      expiresAt: '2024-03-21T10:30:00Z',
+      expiresAt: new Date(Date.now() + (2 * 60 * 60 * 1000)).toISOString(), // 2 hours from now
       description: 'Emergency surgery required for accident victim. Critical condition.',
     },
     {
@@ -50,7 +50,7 @@ const Emergency = () => {
       hospital: 'Apollo Hospital',
       unitsNeeded: 2,
       postedAt: '2024-03-20T14:15:00Z',
-      expiresAt: '2024-03-21T14:15:00Z',
+      expiresAt: new Date(Date.now() + (6 * 60 * 60 * 1000)).toISOString(), // 6 hours from now
       description: 'Cancer patient needs blood transfusion before chemotherapy.',
     },
     {
@@ -64,10 +64,52 @@ const Emergency = () => {
       hospital: 'Fortis Hospital',
       unitsNeeded: 1,
       postedAt: '2024-03-20T16:00:00Z',
-      expiresAt: '2024-03-22T16:00:00Z',
+      expiresAt: new Date(Date.now() + (12 * 60 * 60 * 1000)).toISOString(), // 12 hours from now
       description: 'Scheduled surgery tomorrow morning. One unit required.',
     },
-  ]);
+  ];
+
+  // Initialize emergency requests from localStorage or use default
+  const [emergencyRequests, setEmergencyRequests] = useState(() => {
+    try {
+      const saved = localStorage.getItem('emergencyRequests');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Filter out expired requests on load
+        const activeRequests = parsed.filter((request: any) => 
+          new Date(request.expiresAt).getTime() > Date.now()
+        );
+        return activeRequests.length > 0 ? activeRequests : defaultRequests;
+      }
+    } catch (error) {
+      console.error('Error loading emergency requests from localStorage:', error);
+    }
+    return defaultRequests;
+  });
+
+  // Save to localStorage whenever emergencyRequests changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('emergencyRequests', JSON.stringify(emergencyRequests));
+    } catch (error) {
+      console.error('Error saving emergency requests to localStorage:', error);
+    }
+  }, [emergencyRequests]);
+
+  // Clean up expired requests periodically
+  useEffect(() => {
+    const cleanupExpired = () => {
+      setEmergencyRequests(prev => 
+        prev.filter(request => new Date(request.expiresAt).getTime() > Date.now())
+      );
+    };
+
+    // Clean up immediately and then every minute
+    cleanupExpired();
+    const interval = setInterval(cleanupExpired, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
